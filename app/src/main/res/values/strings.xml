@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Beer List</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_add_beer">Add a new beer</string>
+    <string name="description_text">
+        "Ici on trouvera tous les champs nécessaire à l'ajout d'une nouvelle bière!"
+    </string>
+</resources>
