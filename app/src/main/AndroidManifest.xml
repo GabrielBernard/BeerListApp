@@ -20,12 +20,7 @@
         </activity>
         <activity
             android:name=".AddBeer"
-            android:label="@string/title_activity_add_beer"
-            android:parentActivityName=".BeerListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.app.didier.gabriel.beerlist.BeerListActivity" />
+            android:label="@string/title_activity_add_beer">
         </activity>
     </application>
 

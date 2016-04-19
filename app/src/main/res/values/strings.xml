@@ -5,4 +5,9 @@
     <string name="description_text">
         "Ici on trouvera tous les champs nécessaire à l'ajout d'une nouvelle bière!"
     </string>
+    <string name="beer_name">Name of the beer.</string>
+    <string name="brewery_name">Name of the brewery (microbrewery).</string>
+    <string name="alcohol_content">Alcohol content.</string>
+    <string name="where_it_was_found">Where did you find the beer.</string>
+    <string name="color">What is the color of the beer.</string>
 </resources>
