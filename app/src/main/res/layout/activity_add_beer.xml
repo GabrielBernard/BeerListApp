@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,45 +7,71 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.app.didier.gabriel.beerlist.AddBeer">
+    tools:context="com.app.didier.gabriel.beerlist.AddBeer"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/beer_name"
+        />
 
     <EditText
         android:id="@+id/Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:inputType="textCapWords"
+        />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/beer_name"
+        android:text="@string/brewery_name"
         />
 
     <EditText
         android:id="@+id/Brewery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords"
+        />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Name"
-        android:hint="@string/brewery_name"
+        android:text="@string/alcohol_content"
         />
 
     <EditText
         android:id="@+id/AlcoholContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Brewery"
-        android:hint="@string/alcohol_content"
+        android:text="@string/where_it_was_found"
         />
 
     <EditText
         android:id="@+id/WhereFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPostalAddress" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/AlcoholContent"
-        android:hint="@string/where_it_was_found"
+        android:text="@string/color"
         />
 
     <EditText
         android:id="@+id/Color"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/WhereFound"
-        android:hint="@string/color"
-        />
+        android:inputType="textCapWords" />
 
-</RelativeLayout>
+</LinearLayout>
