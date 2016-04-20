@@ -18,7 +18,6 @@ public class BeerListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_beer_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
     }
 
     /** Called when the user clicks the floating add button */
