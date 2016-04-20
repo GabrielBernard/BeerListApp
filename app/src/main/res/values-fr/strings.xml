@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Beer List</string>
+    <string name="action_settings">Configuration</string>
+    <string name="title_activity_add_beer">Ajouter une bière</string>
+
+    <string name="soon">BeerList sera bientôt là!</string>
+
+    <!--AddBeer strings list-->
+    <string name="beer_name">Nom de la bière:</string>
+    <string name="brewery_name">Nom de la brasserie:</string>
+    <string name="alcohol_content">Degré d\'alcool:</string>
+    <string name="where_it_was_found">Où trouve-t-on cette bière?</string>
+    <string name="color">Couleur de la bière:</string>
+</resources>
