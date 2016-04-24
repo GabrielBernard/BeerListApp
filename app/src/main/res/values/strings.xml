@@ -11,4 +11,7 @@
     <string name="alcohol_content">Alcohol content:</string>
     <string name="where_it_was_found">Where did you find the beer?</string>
     <string name="color">Beer\'s color:</string>
+    <string name="save_beer_infos">Save Beer</string>
+    <string name="beer_must_have_name">Beer must have a name</string>
+    <string name="beer_saved">The new beer was saved</string>
 </resources>

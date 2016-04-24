@@ -15,13 +15,14 @@ public class BeerListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_beer_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     /** Called when the user clicks the floating add button */
-    public void addBeer(View view){
+    public void addBeerWindow(View view){
         Intent intent = new Intent(this, AddBeer.class);
         startActivity(intent);
 

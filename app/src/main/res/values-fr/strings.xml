@@ -11,4 +11,7 @@
     <string name="alcohol_content">Degré d\'alcool:</string>
     <string name="where_it_was_found">Où trouve-t-on cette bière?</string>
     <string name="color">Couleur de la bière:</string>
+    <string name="save_beer_infos">Enregistrer la bièrer</string>
+    <string name="beer_must_have_name">Il faut un nom à la bière</string>
+    <string name="beer_saved">La bière a été enregistrée</string>
 </resources>
