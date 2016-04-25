@@ -54,7 +54,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <TextView
                 android:layout_height="wrap_content"
@@ -66,6 +66,11 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="@string/alcohol_content" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/price"/>
         </LinearLayout>
 
         <LinearLayout
@@ -84,6 +89,12 @@
                 android:id="@+id/AlcoholContent"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
+                android:layout_weight="1"
+                android:inputType="numberDecimal" />
+            <EditText
+                android:id="@+id/price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="numberDecimal" />
         </LinearLayout>

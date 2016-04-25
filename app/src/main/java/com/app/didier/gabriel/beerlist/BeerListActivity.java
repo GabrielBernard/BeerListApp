@@ -1,16 +1,30 @@
 package com.app.didier.gabriel.beerlist;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-public class BeerListActivity extends AppCompatActivity {
+public class BeerListActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    SimpleCursorAdapter adapter;
+    private static final String[] PROJECTION = new String[]{
+            DBContract.Beers._ID,
+            DBContract.Beers.COLUMN_NAME_BEER_NAME,
+            DBContract.Beers.COLUMN_NAME_PRICE
+    };
+    private String order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +33,19 @@ public class BeerListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_beer_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ListView listView = (ListView) findViewById(R.id.list_view);
+
+        String[] fromColumns = {DBContract.Beers.COLUMN_NAME_BEER_NAME, DBContract.Beers.COLUMN_NAME_PRICE};
+        int[] to = {R.id.beer_name, R.id.beer_price};
+
+        adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, 0);
+        listView.setAdapter(adapter);
+
+        order = DBContract.Beers.DEFAULT_SORT_ORDER;
+
+        getSupportLoaderManager().initLoader(1, null, this);
+
     }
 
     /** Called when the user clicks the floating add button */
@@ -49,4 +76,24 @@ public class BeerListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+        Uri CONTENT_URI = DBContract.Beers.CONTENT_URI;
+        return new CursorLoader(this, CONTENT_URI, PROJECTION, null, null, order);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+        adapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // If the Cursor is being placed in a CursorAdapter, you should use the
+        // swapCursor(null) method to remove any references it has to the
+        // Loader's data.
+        adapter.swapCursor(null);
+    }
+
 }

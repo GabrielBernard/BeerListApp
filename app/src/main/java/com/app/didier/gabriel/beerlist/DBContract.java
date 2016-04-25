@@ -47,6 +47,9 @@ public final class DBContract {
         // Column for the beer's score <Type: REAL>
         public static final String COLUMN_NAME_SCORE = "score";
 
+        // Column for the beer's price <Type: REAL>
+        public static final String COLUMN_NAME_PRICE = "price";
+
         // Column for the beer's creation timestamp <Type: INTEGER>
         public static final String COLUMN_NAME_CREATE_DATE = "created";
 
@@ -57,7 +60,7 @@ public final class DBContract {
         public static final String[] beers = new String[] {
                 COLUMN_NAME_BEER_NAME, COLUMN_NAME_BREWERY, COLUMN_NAME_COLOR,
                 COLUMN_NAME_ALCOHOL_CONTENT, COLUMN_NAME_WHERE_BOUGHT, COLUMN_NAME_SCORE,
-                COLUMN_NAME_CREATE_DATE, COLUMN_NAME_MODIFICATION_DATE
+                COLUMN_NAME_PRICE, COLUMN_NAME_CREATE_DATE, COLUMN_NAME_MODIFICATION_DATE
         };
 
         /**

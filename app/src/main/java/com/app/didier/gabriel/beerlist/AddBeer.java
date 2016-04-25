@@ -82,12 +82,15 @@ public class AddBeer extends AppCompatActivity {
      * @param count : the column in the database that correspond to the data
      */
     private void findDataInView(LinearLayout layout, ContentValues data, int count) {
+
+        // Scan a LinearLayout to find all EditText field
         for(int i = 0; i < addBeerLayout.getChildCount(); i++ ){
             if(layout.getChildAt(i) instanceof  EditText){
                 Editable text = ((EditText) layout.getChildAt(i)).getText();
                 data.put(DBContract.Beers.beers[count++], text.toString());
 
             } else if(layout.getChildAt(i) instanceof LinearLayout) {
+                // Call recursively the findDataInView if another LinearLayout is in the first one
                 findDataInView((LinearLayout) layout.getChildAt(i), data, count);
                 count = data.size();
             }

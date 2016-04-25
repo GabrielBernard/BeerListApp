@@ -56,6 +56,7 @@ public class DBProvider extends ContentProvider {
             Beers.COLUMN_NAME_BREWERY + TEXT_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_COLOR + TEXT_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_ALCOHOL_CONTENT + DOUBLE_TYPE + COMMA_SEP +
+            Beers.COLUMN_NAME_PRICE+ DOUBLE_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_WHERE_BOUGHT + TEXT_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_SCORE + DOUBLE_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_CREATE_DATE + INTEGER_TYPE + COMMA_SEP +
@@ -102,6 +103,7 @@ public class DBProvider extends ContentProvider {
         sBeersProjectionMap.put(Beers.COLUMN_NAME_BREWERY, Beers.COLUMN_NAME_BREWERY);
         sBeersProjectionMap.put(Beers.COLUMN_NAME_COLOR, Beers.COLUMN_NAME_COLOR);
         sBeersProjectionMap.put(Beers.COLUMN_NAME_ALCOHOL_CONTENT, Beers.COLUMN_NAME_ALCOHOL_CONTENT);
+        sBeersProjectionMap.put(Beers.COLUMN_NAME_PRICE, Beers.COLUMN_NAME_PRICE);
         sBeersProjectionMap.put(Beers.COLUMN_NAME_WHERE_BOUGHT, Beers.COLUMN_NAME_WHERE_BOUGHT);
         sBeersProjectionMap.put(Beers.COLUMN_NAME_SCORE, Beers.COLUMN_NAME_SCORE);
         sBeersProjectionMap.put(Beers.COLUMN_NAME_CREATE_DATE, Beers.COLUMN_NAME_CREATE_DATE);
