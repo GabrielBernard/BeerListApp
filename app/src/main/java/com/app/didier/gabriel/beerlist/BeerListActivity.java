@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,6 +25,10 @@ public class BeerListActivity extends AppCompatActivity implements
             DBContract.Beers.COLUMN_NAME_BEER_NAME,
             DBContract.Beers.COLUMN_NAME_PRICE
     };
+    String[] fromColumns = {
+            DBContract.Beers.COLUMN_NAME_BEER_NAME,
+            DBContract.Beers.COLUMN_NAME_PRICE
+    };
     private String order;
 
     @Override
@@ -36,15 +41,14 @@ public class BeerListActivity extends AppCompatActivity implements
 
         ListView listView = (ListView) findViewById(R.id.list_view);
 
-        String[] fromColumns = {DBContract.Beers.COLUMN_NAME_BEER_NAME, DBContract.Beers.COLUMN_NAME_PRICE};
-        int[] to = {R.id.beer_name, R.id.beer_price};
+        int[] to = {R.id.beer_name_entry, R.id.beer_price_entry};
 
-        adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, 0);
-        listView.setAdapter(adapter);
+        adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         order = DBContract.Beers.DEFAULT_SORT_ORDER;
 
-        getSupportLoaderManager().initLoader(1, null, this);
+        getLoaderManager().initLoader(1, null, this);
+        listView.setAdapter(adapter);
 
     }
 

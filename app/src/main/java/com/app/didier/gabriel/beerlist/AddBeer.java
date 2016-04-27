@@ -15,6 +15,8 @@ public class AddBeer extends AppCompatActivity {
 
     // LinearLayout where all the data to add a beer can be found.
     private LinearLayout addBeerLayout;
+    private int[] ids = {R.id.Name, R.id.Brewery, R.id.Color,
+            R.id.AlcoholContent, R.id.Price, R.id.WhereFound};
 
     /**
      * This is the method that create the view based on the activity_add_beer.xml
@@ -60,7 +62,7 @@ public class AddBeer extends AppCompatActivity {
 
         // Call a private method that retrieve all the informations
         // given by the user for the new beer
-        findDataInView(addBeerLayout, data, 0);
+        findDataInView(data);
 
         // Try to write the beer to the database with the content provider
         getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
@@ -75,25 +77,14 @@ public class AddBeer extends AppCompatActivity {
     }
 
     /**
-     * Private method that search a LinearLayout for all EditText and get the values
-     * for each of them.
-     * @param layout : the layout to search
+     * Private method that populate a ContentValues map with the beers information.
      * @param data : the container for the datas
-     * @param count : the column in the database that correspond to the data
      */
-    private void findDataInView(LinearLayout layout, ContentValues data, int count) {
+    private void findDataInView(ContentValues data) {
 
-        // Scan a LinearLayout to find all EditText field
-        for(int i = 0; i < addBeerLayout.getChildCount(); i++ ){
-            if(layout.getChildAt(i) instanceof  EditText){
-                Editable text = ((EditText) layout.getChildAt(i)).getText();
-                data.put(DBContract.Beers.beers[count++], text.toString());
-
-            } else if(layout.getChildAt(i) instanceof LinearLayout) {
-                // Call recursively the findDataInView if another LinearLayout is in the first one
-                findDataInView((LinearLayout) layout.getChildAt(i), data, count);
-                count = data.size();
-            }
+        for(int i = 0; i < ids.length; i++) {
+            Editable text = ((EditText) findViewById(ids[i])).getText();
+            data.put(DBContract.Beers.beers[i], text.toString());
         }
     }
 }

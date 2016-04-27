@@ -59,8 +59,8 @@ public final class DBContract {
         // ArrayList of all column names
         public static final String[] beers = new String[] {
                 COLUMN_NAME_BEER_NAME, COLUMN_NAME_BREWERY, COLUMN_NAME_COLOR,
-                COLUMN_NAME_ALCOHOL_CONTENT, COLUMN_NAME_WHERE_BOUGHT, COLUMN_NAME_SCORE,
-                COLUMN_NAME_PRICE, COLUMN_NAME_CREATE_DATE, COLUMN_NAME_MODIFICATION_DATE
+                COLUMN_NAME_ALCOHOL_CONTENT, COLUMN_NAME_PRICE, COLUMN_NAME_WHERE_BOUGHT,
+                COLUMN_NAME_SCORE, COLUMN_NAME_CREATE_DATE, COLUMN_NAME_MODIFICATION_DATE
         };
 
         /**
