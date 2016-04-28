@@ -8,8 +8,6 @@ package com.app.didier.gabriel.beerlist;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import java.util.ArrayList;
-
 /**
  * This class defines a contract between the DBProvider
  */

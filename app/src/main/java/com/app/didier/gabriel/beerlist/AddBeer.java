@@ -1,6 +1,7 @@
 package com.app.didier.gabriel.beerlist;
 
 import android.content.ContentValues;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +25,7 @@ public class AddBeer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_beer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.AddBeerToolbar);
-        if (toolbar != null) {
+        assert toolbar != null;
             setSupportActionBar(toolbar);
 
             assert getSupportActionBar() != null;
@@ -36,9 +37,6 @@ public class AddBeer extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-        }
-
-        //addBeerLayout = (LinearLayout) findViewById(R.id.add_beer_layout);
     }
 
     /** Called when the user clicks the Save Beer button */
@@ -68,8 +66,15 @@ public class AddBeer extends AppCompatActivity {
         // given by the user for the new beer
         retrieveDataInView(data);
 
-        // Try to write the beer to the database with the content provider
-        getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
+        try {
+            // Try to write the beer to the database with the content provider
+            getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
+        } catch (SQLException e){
+            message = getString(R.string.beer_already_in_db);
+            Toast toast = Toast.makeText(getBaseContext(), message, duration);
+            toast.show();
+            return;
+        }
 
         // Display success message for the write in the database
         message = getString(R.string.beer_saved);

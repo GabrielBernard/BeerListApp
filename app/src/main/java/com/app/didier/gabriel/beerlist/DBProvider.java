@@ -47,6 +47,7 @@ public class DBProvider extends ContentProvider {
 
     // Important data for SQLite table creation
     private static final String TEXT_TYPE = " TEXT";
+    private static final String TEXT_UNIQUE = " TEXT NOT NULL UNIQUE";
     private static final String DOUBLE_TYPE = " REAL";
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
@@ -54,7 +55,7 @@ public class DBProvider extends ContentProvider {
     // Creation of the SQLite table with the DBContract
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + Beers.TABLE_NAME +
             " (" + Beers._ID + " INTEGER PRIMARY KEY," +
-            Beers.COLUMN_NAME_BEER_NAME + TEXT_TYPE + COMMA_SEP +
+            Beers.COLUMN_NAME_BEER_NAME + TEXT_UNIQUE + COMMA_SEP +
             Beers.COLUMN_NAME_BREWERY + TEXT_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_COLOR + TEXT_TYPE + COMMA_SEP +
             Beers.COLUMN_NAME_ALCOHOL_CONTENT + DOUBLE_TYPE + COMMA_SEP +
@@ -239,7 +240,7 @@ public class DBProvider extends ContentProvider {
 
         SQLiteDatabase db = openHelper.getWritableDatabase();
 
-        long rowID = db.insert(Beers.TABLE_NAME, Beers.COLUMN_NAME_BEER_NAME, initialValues);
+        long rowID = db.insertWithOnConflict(Beers.TABLE_NAME, Beers.COLUMN_NAME_BEER_NAME, initialValues, SQLiteDatabase.CONFLICT_ROLLBACK);
 
         if(rowID > 0) {
             Uri returnedUri = ContentUris.withAppendedId(Beers.CONTENT_ID_URI_BASE, rowID);
@@ -270,13 +271,10 @@ public class DBProvider extends ContentProvider {
 
         SQLiteDatabase db = openHelper.getWritableDatabase();
 
-        return db.update(Beers.TABLE_NAME, values, where, whereArgs);
+        int rows = db.updateWithOnConflict(Beers.TABLE_NAME, values, where, whereArgs, SQLiteDatabase.CONFLICT_ROLLBACK);
+        getContext().getContentResolver().notifyChange(uri, null);
 
-        /*if(rowsModified > 0) {
-            return rowsModified;
-        }*/
-
-        //throw new SQLException("Failed to insert row into " + uri);
+        return rows;
     }
 
     @Override
@@ -287,7 +285,10 @@ public class DBProvider extends ContentProvider {
 
         SQLiteDatabase db = openHelper.getWritableDatabase();
 
-        return db.delete(Beers.TABLE_NAME, where, whereArgs);
+        int rows = db.delete(Beers.TABLE_NAME, where, whereArgs);
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rows;
     }
 }
 

@@ -13,6 +13,17 @@
     <string name="color">Couleur de la bière:</string>
     <string name="price">Prix de la bière</string>
     <string name="save_beer_infos">Enregistrer la bièrer</string>
-    <string name="beer_must_have_name">Il faut un nom à la bière</string>
     <string name="beer_saved">La bière a été enregistrée</string>
+
+    <!--Exception handling-->
+    <string name="beer_must_have_name">Il faut un nom à la bière</string>
+    <string name="beer_already_in_db">La bière est déjà dans la base de données ou un problème d\'insertion est survenu</string>
+    <string name="beer_updated">La bière a été mise à jour</string>
+    <string name="beer_not_updated">Aucun changement n\'a été trouvé</string>
+    <string name="beer_deleted">La bière a été supprimée</string>
+    <string name="beer_not_deleted">La biére n\'a pas été supprimée</string>
+
+    <!--Show Beer strings list-->
+    <string name="update_change">Sauvegarder les changements</string>
+    <string name="delete_beer">Supprimer la bière</string>
 </resources>
