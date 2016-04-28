@@ -1,6 +1,8 @@
 
 /**
+ * DBProvider.java
  * Created by Gabriel on 16-04-20.
+ * Modified on 16-04-27
  */
 
 package com.app.didier.gabriel.beerlist;
@@ -23,6 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.util.HashMap;
@@ -39,7 +42,6 @@ import java.util.HashMap;
 public class DBProvider extends ContentProvider {
 
     // Database name, version, etc.
-    private static final String TAG = "DBProvider";
     private static final String DATABASE_NAME = "beers.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -150,19 +152,24 @@ public class DBProvider extends ContentProvider {
         return true;
     }
 
+    /**
+     * Funciton that return the MIME for the URI matcher depending of the entered URI.
+     * @param  uri : URI used to access the SQLite Database.
+     * @return : The MIME for the URI matcher.
+     */
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sURIMatcher.match(uri)) {
             case (BEERS):
                 return Beers.CONTENT_TYPE;
             case (BEER_ID):
                 return Beers.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unknown URI" + uri);
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
     }
 
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
         // Create a query builder for the beers SQL database
@@ -181,7 +188,7 @@ public class DBProvider extends ContentProvider {
                 queryBuilder.appendWhere(Beers._ID + "=" + uri.getPathSegments().get(Beers.BEER_ID_PATH_POSITION));
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI" + uri);
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
         // Choose the sort order of the query result
@@ -202,20 +209,22 @@ public class DBProvider extends ContentProvider {
         Cursor c = queryBuilder.query(db, projection, selection, selectionArgs, null, null, order);
 
         // Tells the cursor tu watch this URI for any changes
-        c.setNotificationUri(getContext().getContentResolver(), uri);
+        if(getContext() != null) {
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+        }
 
         return c;
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues initialValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
 
-        if(sURIMatcher.match(uri) != BEERS){
-            throw new IllegalArgumentException("Unknown URI" + uri);
+        if(sURIMatcher.match(uri) != BEERS) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        if(initialValues == null){
-            throw new IllegalArgumentException("Initial Values must AT LEAST contains the BEER NAME!");
+        if(initialValues == null) {
+            throw new IllegalArgumentException("Insertion in the beer database must at least contains the name of the beer.");
         }
 
         long now = System.currentTimeMillis();
@@ -236,7 +245,9 @@ public class DBProvider extends ContentProvider {
             Uri returnedUri = ContentUris.withAppendedId(Beers.CONTENT_ID_URI_BASE, rowID);
 
             // Notify observers of changes in data
+            assert getContext() != null;
             getContext().getContentResolver().notifyChange(returnedUri, null);
+
 
             return returnedUri;
         }
@@ -246,13 +257,37 @@ public class DBProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        return 0;
+    public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
+        if(sURIMatcher.match(uri) != BEERS) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        long now = System.currentTimeMillis();
+
+        if(!values.containsKey(Beers.COLUMN_NAME_MODIFICATION_DATE)) {
+            values.put(Beers.COLUMN_NAME_MODIFICATION_DATE, now);
+        }
+
+        SQLiteDatabase db = openHelper.getWritableDatabase();
+
+        return db.update(Beers.TABLE_NAME, values, where, whereArgs);
+
+        /*if(rowsModified > 0) {
+            return rowsModified;
+        }*/
+
+        //throw new SQLException("Failed to insert row into " + uri);
     }
 
     @Override
-    public int delete(Uri uri, String where, String[] whereArgs) {
-        return 0;
+    public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
+        if(sURIMatcher.match(uri) != BEERS) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        SQLiteDatabase db = openHelper.getWritableDatabase();
+
+        return db.delete(Beers.TABLE_NAME, where, whereArgs);
     }
 }
 

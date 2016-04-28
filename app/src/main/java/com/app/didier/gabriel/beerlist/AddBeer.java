@@ -1,20 +1,18 @@
 package com.app.didier.gabriel.beerlist;
 
 import android.content.ContentValues;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class AddBeer extends AppCompatActivity {
 
     // LinearLayout where all the data to add a beer can be found.
-    private LinearLayout addBeerLayout;
+    //private LinearLayout addBeerLayout;
     private int[] ids = {R.id.Name, R.id.Brewery, R.id.Color,
             R.id.AlcoholContent, R.id.Price, R.id.WhereFound};
 
@@ -28,6 +26,8 @@ public class AddBeer extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.AddBeerToolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+
+            assert getSupportActionBar() != null;
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,7 @@ public class AddBeer extends AppCompatActivity {
             });
         }
 
-        addBeerLayout = (LinearLayout) findViewById(R.id.add_beer_layout);
+        //addBeerLayout = (LinearLayout) findViewById(R.id.add_beer_layout);
     }
 
     /** Called when the user clicks the Save Beer button */
@@ -49,7 +49,11 @@ public class AddBeer extends AppCompatActivity {
         String message;
 
         // Find the beer name and verifies that it is not empty
-        String beer_name = ((EditText) findViewById(R.id.Name)).getText().toString();
+        EditText editText = (EditText) findViewById(R.id.Name);
+
+        assert editText != null;
+        String beer_name = editText.getText().toString();
+
         if(beer_name.isEmpty()){
             message = getString(R.string.beer_must_have_name);
             Toast toast = Toast.makeText(getBaseContext(), message, duration);
@@ -62,7 +66,7 @@ public class AddBeer extends AppCompatActivity {
 
         // Call a private method that retrieve all the informations
         // given by the user for the new beer
-        findDataInView(data);
+        retrieveDataInView(data);
 
         // Try to write the beer to the database with the content provider
         getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
@@ -80,11 +84,14 @@ public class AddBeer extends AppCompatActivity {
      * Private method that populate a ContentValues map with the beers information.
      * @param data : the container for the datas
      */
-    private void findDataInView(ContentValues data) {
+    private void retrieveDataInView(ContentValues data) {
 
         for(int i = 0; i < ids.length; i++) {
-            Editable text = ((EditText) findViewById(ids[i])).getText();
-            data.put(DBContract.Beers.beers[i], text.toString());
+            EditText text = (EditText) findViewById(ids[i]);
+            if(text != null) {
+                Editable content = text.getText();
+                data.put(DBContract.Beers.beers[i], content.toString());
+            }
         }
     }
 }
