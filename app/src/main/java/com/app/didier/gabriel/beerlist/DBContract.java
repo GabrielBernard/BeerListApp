@@ -66,7 +66,7 @@ public final class DBContract {
         /**
          * SQLite default sort order
          */
-        public static final String DEFAULT_SORT_ORDER = "name DESC";
+        public static final String DEFAULT_SORT_ORDER = "name ASC";
 
         /**
          * URI definitions to use with Android's ContentProvider

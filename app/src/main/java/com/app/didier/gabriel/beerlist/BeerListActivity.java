@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +20,14 @@ import android.widget.ListView;
 public class BeerListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    SimpleCursorAdapter adapter;
+    public static final String ON_CLICK_BEER_ID = "beer_id";
+    private SimpleCursorAdapter adapter;
     private static final String[] PROJECTION = new String[]{
             DBContract.Beers._ID,
             DBContract.Beers.COLUMN_NAME_BEER_NAME,
             DBContract.Beers.COLUMN_NAME_PRICE
     };
-    String[] fromColumns = {
+    private String[] fromColumns = {
             DBContract.Beers.COLUMN_NAME_BEER_NAME,
             DBContract.Beers.COLUMN_NAME_PRICE
     };
@@ -39,7 +41,14 @@ public class BeerListActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
+        Intent intent = getIntent();
+
+        if(intent.getData() == null) {
+            intent.setData(DBContract.Beers.CONTENT_URI);
+        }
+
+        final ListView listView = (ListView) findViewById(R.id.list_view);
+        assert listView != null;
 
         int[] to = {R.id.beer_name_entry, R.id.beer_price_entry};
 
@@ -49,6 +58,16 @@ public class BeerListActivity extends AppCompatActivity implements
 
         getLoaderManager().initLoader(1, null, this);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor c = (Cursor) listView.getItemAtPosition(position);
+                Intent intent = new Intent(BeerListActivity.this, ShowBeer.class);
+                intent.putExtra(ON_CLICK_BEER_ID, c.getInt(0));
+                startActivity(intent);
+            }
+        });
 
     }
 

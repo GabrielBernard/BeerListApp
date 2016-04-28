@@ -9,11 +9,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <provider
-            android:authorities="com.app.didier.gabriel.provider.beers"
             android:name=".DBProvider"
-            android:exported="false"
-            >
-        </provider>
+            android:authorities="com.app.didier.gabriel.provider.beers"
+            android:exported="false"></provider>
+
         <activity
             android:name=".BeerListActivity"
             android:label="@string/app_name"
@@ -27,8 +26,8 @@
         <activity
             android:name=".AddBeer"
             android:label="@string/title_activity_add_beer"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ShowBeer"></activity>
     </application>
 
 </manifest>
