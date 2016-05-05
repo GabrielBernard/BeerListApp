@@ -2,6 +2,7 @@ package com.app.didier.gabriel.beerlist;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,8 +77,55 @@ public class ShowBeer extends AppCompatActivity {
         findUpdates(updates);
 
         if(updates.size() > 0) {
-            String where = DBContract.Beers._ID + " = " + beerId;
-            rows = getContentResolver().update(DBContract.Beers.CONTENT_URI, updates, where, null);
+            if(updates.containsKey(DBContract.Beers.COLUMN_NAME_BEER_NAME)) {
+                String beer_name = (String) updates.get(DBContract.Beers.COLUMN_NAME_BEER_NAME);
+                if(beer_name.isEmpty()) {
+                    message = getString(R.string.beer_must_have_name);
+                    toast = Toast.makeText(getBaseContext(), message, duration);
+                    toast.show();
+                    return;
+                }
+            }
+
+            if(updates.containsKey(DBContract.Beers.COLUMN_NAME_PRICE)){
+                int beer_price;
+                String price;
+                String value = (String) updates.get(DBContract.Beers.COLUMN_NAME_PRICE);
+                try {
+                    value = value.replace(',', '.');
+                    int pos = value.indexOf('.');
+                    if (pos >= 0) {
+                        price = value.substring(0, pos);
+                        if (pos + 2 < value.length()) {
+                            price = price.concat(value.substring(pos+1, pos+3));
+                        } else if (pos + 1 < value.length()) {
+                            price = price.concat(value.substring(pos+1, pos+2) + "0");
+                        } else {
+                            price = value.substring(0, pos) + "00";
+                        }
+                    } else {
+                        price = value + "00";
+                    }
+                    beer_price = Integer.parseInt(price);
+                } catch (NumberFormatException e) {
+                    message = getString(R.string.beer_price_problem);
+                    toast = Toast.makeText(getBaseContext(), message, duration);
+                    toast.show();
+                    return;
+                }
+                updates.remove(DBContract.Beers.COLUMN_NAME_PRICE);
+                updates.put(DBContract.Beers.COLUMN_NAME_PRICE, beer_price);
+            }
+
+            try {
+                String where = DBContract.Beers._ID + " = " + beerId;
+                rows = getContentResolver().update(DBContract.Beers.CONTENT_URI, updates, where, null);
+            } catch(SQLException e) {
+                message = getString(R.string.beer_already_in_db);
+                toast = Toast.makeText(getBaseContext(), message, duration);
+                toast.show();
+                return;
+            }
         }
         if(rows > 0) {
             message = getString(R.string.beer_updated);
@@ -86,6 +134,7 @@ public class ShowBeer extends AppCompatActivity {
             message = getString(R.string.beer_not_updated);
             toast = Toast.makeText(getBaseContext(), message, duration);
         }
+
         toast.show();
         finish();
     }
@@ -136,7 +185,16 @@ public class ShowBeer extends AppCompatActivity {
         for(int i = 0; i < count - 1 && cursor.isLast(); i++) {
             int pos = cursor.getColumnIndex(FROM_COLUMNS[i]);
             EditText editText = columnNameToEditText.get(FROM_COLUMNS[i]);
-            editText.setText(cursor.getString(pos));
+            String data = cursor.getString(pos);
+            if(FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_PRICE)) {
+                int decimal = data.length()-2;
+                String beer_price = data.substring(0, decimal) + "." + data.substring(decimal);
+                // Populate fields with extracted properties
+                editText.setText(beer_price);
+            } else {
+                // Populate fields with extracted properties
+                editText.setText(data);
+            }
         }
     }
 }

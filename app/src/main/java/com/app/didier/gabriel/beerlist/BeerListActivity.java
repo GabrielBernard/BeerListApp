@@ -21,7 +21,8 @@ public class BeerListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ON_CLICK_BEER_ID = "beer_id";
-    private SimpleCursorAdapter adapter;
+    //private SimpleCursorAdapter adapter;
+    private BeerAdapter adapter;
     private static final String[] PROJECTION = new String[]{
             DBContract.Beers._ID,
             DBContract.Beers.COLUMN_NAME_BEER_NAME,
@@ -52,7 +53,8 @@ public class BeerListActivity extends AppCompatActivity implements
 
         int[] to = {R.id.beer_name_entry, R.id.beer_price_entry};
 
-        adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        //adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        adapter = new BeerAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         order = DBContract.Beers.DEFAULT_SORT_ORDER;
 

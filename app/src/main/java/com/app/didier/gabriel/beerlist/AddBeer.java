@@ -43,6 +43,7 @@ public class AddBeer extends AppCompatActivity {
     public void addBeerToDB(View view) {
 
         // Toast duration and message
+        Toast toast;
         int duration = Toast.LENGTH_LONG;
         String message;
 
@@ -54,7 +55,7 @@ public class AddBeer extends AppCompatActivity {
 
         if(beer_name.isEmpty()){
             message = getString(R.string.beer_must_have_name);
-            Toast toast = Toast.makeText(getBaseContext(), message, duration);
+            toast = Toast.makeText(getBaseContext(), message, duration);
             toast.show();
             return;
         }
@@ -66,19 +67,50 @@ public class AddBeer extends AppCompatActivity {
         // given by the user for the new beer
         retrieveDataInView(data);
 
+        // Take care of the price if user enters it with a comma
+        if (data.containsKey(DBContract.Beers.COLUMN_NAME_PRICE)) {
+            int beer_price;
+            String price;
+            String value = (String) data.get(DBContract.Beers.COLUMN_NAME_PRICE);
+            try {
+                value = value.replace(',', '.');
+                int pos = value.indexOf('.');
+                if (pos >= 0) {
+                    price = value.substring(0, pos);
+                    if (pos + 2 < value.length()) {
+                        price = price.concat(value.substring(pos+1, pos+3));
+                    } else if (pos + 1 < value.length()) {
+                        price = price.concat(value.substring(pos+1, pos+2) + "0");
+                    } else {
+                        price = value.substring(0, pos) + "00";
+                    }
+                } else {
+                    price = value + "00";
+                }
+                beer_price = Integer.parseInt(price);
+            } catch (NumberFormatException e) {
+                message = getString(R.string.beer_price_problem);
+                toast = Toast.makeText(getBaseContext(), message, duration);
+                toast.show();
+                return;
+            }
+            data.remove(DBContract.Beers.COLUMN_NAME_PRICE);
+            data.put(DBContract.Beers.COLUMN_NAME_PRICE, beer_price);
+        }
+
         try {
             // Try to write the beer to the database with the content provider
             getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
         } catch (SQLException e){
             message = getString(R.string.beer_already_in_db);
-            Toast toast = Toast.makeText(getBaseContext(), message, duration);
+            toast = Toast.makeText(getBaseContext(), message, duration);
             toast.show();
             return;
         }
 
         // Display success message for the write in the database
         message = getString(R.string.beer_saved);
-        Toast toast = Toast.makeText(getBaseContext(), message, duration);
+        toast = Toast.makeText(getBaseContext(), message, duration);
         toast.show();
 
         // End of the add beer view

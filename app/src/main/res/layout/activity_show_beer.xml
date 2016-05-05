@@ -83,7 +83,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:digits="0123456789.,"/>
     </LinearLayout>
 
     <TextView
@@ -105,12 +106,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/update_change"
+            android:layout_weight="1"
             android:onClick="updateBeer"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_beer"
+            android:layout_weight="1"
             android:onClick="deleteBeer" />
     </LinearLayout>
 

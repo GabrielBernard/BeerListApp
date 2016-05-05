@@ -18,6 +18,7 @@
     <!--Exception handling-->
     <string name="beer_must_have_name">Beer must have a name</string>
     <string name="beer_already_in_db">The beer is already in the database or an insertion problem occurred</string>
+    <string name="beer_price_problem">There is a problem with your beer\'s price</string>
     <string name="beer_updated">The beer was updated</string>
     <string name="beer_not_updated">No change where found</string>
     <string name="beer_deleted">The beer was deleted</string>
