@@ -27,4 +27,11 @@
     <!--Show Beer strings list-->
     <string name="update_change">Sauvegarder les changements</string>
     <string name="delete_beer">Supprimer la bière</string>
+
+    <!--Navigation Drawer-->
+    <string name="perfect_beer_companion">La meilleure application d\'enregistrement de bière!</string>
+    <string name="app_behaviour">Comportement de l\'application</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="beer_near_me">Bonnes bières proches</string>
 </resources>

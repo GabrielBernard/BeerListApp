@@ -44,3 +44,4 @@ _mac/
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
+*.png

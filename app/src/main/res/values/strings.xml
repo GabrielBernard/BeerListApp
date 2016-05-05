@@ -27,4 +27,11 @@
     <!--Show Beer strings list-->
     <string name="update_change">Save Changes</string>
     <string name="delete_beer">Delete Beer</string>
+
+    <!--Navigation Drawer-->
+    <string name="perfect_beer_companion">The perfect beer companion!</string>
+    <string name="app_behaviour">Application\'s behaviour</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="beer_near_me">Good beers near me</string>
 </resources>

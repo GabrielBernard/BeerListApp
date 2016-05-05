@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
@@ -18,10 +22,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 public class BeerListActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String ON_CLICK_BEER_ID = "beer_id";
-    //private SimpleCursorAdapter adapter;
     private BeerAdapter adapter;
     private static final String[] PROJECTION = new String[]{
             DBContract.Beers._ID,
@@ -42,6 +45,16 @@ public class BeerListActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Drawer actions
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         Intent intent = getIntent();
 
         if(intent.getData() == null) {
@@ -53,7 +66,6 @@ public class BeerListActivity extends AppCompatActivity implements
 
         int[] to = {R.id.beer_name_entry, R.id.beer_price_entry};
 
-        //adapter = new SimpleCursorAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         adapter = new BeerAdapter(this, R.layout.item_in_listview, null, fromColumns, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         order = DBContract.Beers.DEFAULT_SORT_ORDER;
@@ -102,6 +114,11 @@ public class BeerListActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Loader methods
+     */
+
+
     @Override
     public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
         Uri CONTENT_URI = DBContract.Beers.CONTENT_URI;
@@ -121,4 +138,32 @@ public class BeerListActivity extends AppCompatActivity implements
         adapter.swapCursor(null);
     }
 
+    /**
+     * Navigation drawer methods
+     */
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        /*if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

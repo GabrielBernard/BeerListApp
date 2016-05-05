@@ -11,7 +11,7 @@
         <provider
             android:name=".DBProvider"
             android:authorities="com.app.didier.gabriel.provider.beers"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".BeerListActivity"
@@ -19,16 +19,17 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".AddBeer"
             android:label="@string/title_activity_add_beer"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ShowBeer"
-            android:label="Beer"/>
+            android:label="Beer" />
     </application>
 
 </manifest>

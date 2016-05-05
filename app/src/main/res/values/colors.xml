@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#b7570e</color>
     <!--color name="colorPrimaryDark">#69675b</color-->
     <color name="colorAccent">#05536c</color>
+    <color name="colorAccentBright">#307591</color>
+    <color name="colorAccentDark">#034154</color>
 </resources>
