@@ -6,6 +6,8 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,13 +46,13 @@ public class ShowBeer extends AppCompatActivity {
 
     private Cursor cursor;
 
-    //private SimpleCursorAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_beer);
         Bundle extras = getIntent().getExtras();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         beerId = Integer.toString(extras.getInt(BeerListActivity.ON_CLICK_BEER_ID));
 
@@ -65,6 +67,35 @@ public class ShowBeer extends AppCompatActivity {
         displayCursorContentInView();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_show_beer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch(id){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case(R.id.show_beer_menu_delete):
+                deleteBeer(null);
+                return true;
+            case(R.id.show_beer_update):
+                updateBeer(null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void updateBeer(View view) {
         ContentValues updates = new ContentValues();
@@ -87,36 +118,6 @@ public class ShowBeer extends AppCompatActivity {
                 }
             }
 
-            if(updates.containsKey(DBContract.Beers.COLUMN_NAME_PRICE)){
-                int beer_price;
-                String price;
-                String value = (String) updates.get(DBContract.Beers.COLUMN_NAME_PRICE);
-                try {
-                    value = value.replace(',', '.');
-                    int pos = value.indexOf('.');
-                    if (pos >= 0) {
-                        price = value.substring(0, pos);
-                        if (pos + 2 < value.length()) {
-                            price = price.concat(value.substring(pos+1, pos+3));
-                        } else if (pos + 1 < value.length()) {
-                            price = price.concat(value.substring(pos+1, pos+2) + "0");
-                        } else {
-                            price = value.substring(0, pos) + "00";
-                        }
-                    } else {
-                        price = value + "00";
-                    }
-                    beer_price = Integer.parseInt(price);
-                } catch (NumberFormatException e) {
-                    message = getString(R.string.beer_price_problem);
-                    toast = Toast.makeText(getBaseContext(), message, duration);
-                    toast.show();
-                    return;
-                }
-                updates.remove(DBContract.Beers.COLUMN_NAME_PRICE);
-                updates.put(DBContract.Beers.COLUMN_NAME_PRICE, beer_price);
-            }
-
             try {
                 String where = DBContract.Beers._ID + " = " + beerId;
                 rows = getContentResolver().update(DBContract.Beers.CONTENT_URI, updates, where, null);
@@ -125,8 +126,14 @@ public class ShowBeer extends AppCompatActivity {
                 toast = Toast.makeText(getBaseContext(), message, duration);
                 toast.show();
                 return;
+            } catch (NumberFormatException e) {
+                message = getString(R.string.beer_price_problem);
+                toast = Toast.makeText(getBaseContext(), message, duration);
+                toast.show();
+                return;
             }
         }
+
         if(rows > 0) {
             message = getString(R.string.beer_updated);
             toast = Toast.makeText(getBaseContext(), message, duration);
@@ -162,11 +169,21 @@ public class ShowBeer extends AppCompatActivity {
         int count = cursor.getColumnCount();
         cursor.moveToFirst();
         for(int i = 0; i < count - 1 && cursor.isLast(); i++) {
-
             String value = columnNameToEditText.get(FROM_COLUMNS[i]).getText().toString();
+            String cursorValue = value;
             int pos = cursor.getColumnIndex(FROM_COLUMNS[i]);
-
-            if(!cursor.getString(pos).equals(value)) {
+            if(FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_PRICE)){
+                int decPos = value.indexOf('.');
+                if(decPos >= 0) {
+                    cursorValue = value.substring(0, decPos) + value.substring(decPos + 1);
+                }
+            } else if (FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_ALCOHOL_CONTENT)) {
+                int decPos = value.indexOf('.');
+                if(decPos >=0) {
+                    cursorValue = value.substring(0, decPos) + value.substring(decPos + 1);
+                }
+            }
+            if(!cursor.getString(pos).equals(cursorValue)) {
                 content.put(FROM_COLUMNS[i], value);
             }
         }
@@ -186,11 +203,24 @@ public class ShowBeer extends AppCompatActivity {
             int pos = cursor.getColumnIndex(FROM_COLUMNS[i]);
             EditText editText = columnNameToEditText.get(FROM_COLUMNS[i]);
             String data = cursor.getString(pos);
-            if(FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_PRICE)) {
-                int decimal = data.length()-2;
-                String beer_price = data.substring(0, decimal) + "." + data.substring(decimal);
+            if(FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_PRICE) && !data.isEmpty()) {
+                double price = Double.parseDouble(data);
+                price /= 100;
+                data = Double.toString(price);
+                if(data.length() <= 3) {
+                    data = data.concat("0");
+                }
                 // Populate fields with extracted properties
-                editText.setText(beer_price);
+                editText.setText(data);
+            } else if (FROM_COLUMNS[i].equals(DBContract.Beers.COLUMN_NAME_ALCOHOL_CONTENT) && !data.isEmpty()){
+                double alcohol = Double.parseDouble(data);
+                alcohol /= 10;
+                data = Double.toString(alcohol);
+                if(data.length() <= 2) {
+                    data = data.concat("0");
+                }
+                // Populate fields with extracted properties
+                editText.setText(data);
             } else {
                 // Populate fields with extracted properties
                 editText.setText(data);

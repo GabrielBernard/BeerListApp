@@ -1,12 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.app.didier.gabriel.beerlist.AddBeer">
+    tools:context="com.app.didier.gabriel.beerlist.ShowBeer">
 
     <item
-        android:id="@+id/add_beer_insert"
+        android:id="@+id/show_beer_update"
         android:icon="@drawable/ic_done_white_24dp"
         android:title="@string/save_beer_infos"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/show_beer_menu_delete"
+        android:orderInCategory="100"
+        android:title="@string/show_beer_delete"
+        app:showAsAction="never" />
 </menu>

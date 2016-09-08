@@ -92,10 +92,10 @@ public class BeerListActivity extends AppCompatActivity implements
 
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_beer_list, menu);
+        getMenuInflater().inflate(R.menu.menu_show_beer, menu);
         return true;
     }
 
@@ -112,7 +112,7 @@ public class BeerListActivity extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     /**
      * Loader methods

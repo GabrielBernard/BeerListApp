@@ -40,11 +40,26 @@ public class BeerAdapter extends CursorAdapter {
             // Extract properties from cursor
             int pos = cursor.getColumnIndexOrThrow(fromColumns[i]);
             String data = cursor.getString(pos);
-            if(fromColumns[i].equals(DBContract.Beers.COLUMN_NAME_PRICE)) {
-                int decimal = data.length()-2;
-                String beer_price = data.substring(0, decimal) + "." + data.substring(decimal);
+            if(fromColumns[i].equals(DBContract.Beers.COLUMN_NAME_PRICE) && !data.isEmpty()) {
+                double price = Double.parseDouble(data);
+                price /= 100;
+                data = Double.toString(price);
+                if(data.length() <= 3) {
+                    data = data.concat("0");
+                }
+                //int decimal = data.length()-2;
+               // String beer_price = data.substring(0, decimal) + "." + data.substring(decimal);
                 // Populate fields with extracted properties
-                textView.setText(beer_price);
+                textView.setText(data);
+            } else if(fromColumns[i].equals(DBContract.Beers.COLUMN_NAME_ALCOHOL_CONTENT) && !data.isEmpty()) {
+                double alcohol = Double.parseDouble(data);
+                alcohol /= 10;
+                data = Double.toString(alcohol);
+                if(data.length() <= 2) {
+                    data = data.concat("0");
+                }
+                // Populate fields with extracted properties
+                textView.setText(data);
             } else {
                 // Populate fields with extracted properties
                 textView.setText(data);

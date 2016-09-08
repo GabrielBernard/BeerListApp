@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddBeer extends AppCompatActivity {
 
-    // LinearLayout where all the data to add a beer can be found.
-    //private LinearLayout addBeerLayout;
     private int[] ids = {R.id.Name, R.id.Brewery, R.id.Color,
             R.id.AlcoholContent, R.id.Price, R.id.WhereFound};
 
@@ -37,6 +37,29 @@ public class AddBeer extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_beer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.add_beer_insert) {
+            addBeerToDB(null);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /** Called when the user clicks the Save Beer button */
@@ -67,42 +90,16 @@ public class AddBeer extends AppCompatActivity {
         // given by the user for the new beer
         retrieveDataInView(data);
 
-        // Take care of the price if user enters it with a comma
-        if (data.containsKey(DBContract.Beers.COLUMN_NAME_PRICE)) {
-            int beer_price;
-            String price;
-            String value = (String) data.get(DBContract.Beers.COLUMN_NAME_PRICE);
-            try {
-                value = value.replace(',', '.');
-                int pos = value.indexOf('.');
-                if (pos >= 0) {
-                    price = value.substring(0, pos);
-                    if (pos + 2 < value.length()) {
-                        price = price.concat(value.substring(pos+1, pos+3));
-                    } else if (pos + 1 < value.length()) {
-                        price = price.concat(value.substring(pos+1, pos+2) + "0");
-                    } else {
-                        price = value.substring(0, pos) + "00";
-                    }
-                } else {
-                    price = value + "00";
-                }
-                beer_price = Integer.parseInt(price);
-            } catch (NumberFormatException e) {
-                message = getString(R.string.beer_price_problem);
-                toast = Toast.makeText(getBaseContext(), message, duration);
-                toast.show();
-                return;
-            }
-            data.remove(DBContract.Beers.COLUMN_NAME_PRICE);
-            data.put(DBContract.Beers.COLUMN_NAME_PRICE, beer_price);
-        }
-
         try {
             // Try to write the beer to the database with the content provider
             getContentResolver().insert(DBContract.Beers.CONTENT_URI, data);
         } catch (SQLException e){
             message = getString(R.string.beer_already_in_db);
+            toast = Toast.makeText(getBaseContext(), message, duration);
+            toast.show();
+            return;
+        } catch (NumberFormatException e) {
+            message = getString(R.string.beer_price_problem);
             toast = Toast.makeText(getBaseContext(), message, duration);
             toast.show();
             return;

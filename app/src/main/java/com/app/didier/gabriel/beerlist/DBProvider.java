@@ -228,6 +228,14 @@ public class DBProvider extends ContentProvider {
             throw new IllegalArgumentException("Insertion in the beer database must at least contains the name of the beer.");
         }
 
+        if(initialValues.containsKey(Beers.COLUMN_NAME_PRICE)) {
+            decimalPriceManagement(initialValues);
+        }
+
+        if(initialValues.containsKey(Beers.COLUMN_NAME_ALCOHOL_CONTENT)) {
+            decimalAlcoholManagement(initialValues);
+        }
+
         long now = System.currentTimeMillis();
 
         if(!initialValues.containsKey(Beers.COLUMN_NAME_CREATE_DATE)) {
@@ -263,6 +271,14 @@ public class DBProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
+        if(values.containsKey(Beers.COLUMN_NAME_PRICE)) {
+            decimalPriceManagement(values);
+        }
+
+        if(values.containsKey(Beers.COLUMN_NAME_ALCOHOL_CONTENT)) {
+            decimalAlcoholManagement(values);
+        }
+
         long now = System.currentTimeMillis();
 
         if(!values.containsKey(Beers.COLUMN_NAME_MODIFICATION_DATE)) {
@@ -289,6 +305,65 @@ public class DBProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri, null);
         return rows;
+    }
+
+    private void decimalPriceManagement(ContentValues values) {
+        int beer_price;
+        String price;
+        String value = (String) values.get(Beers.COLUMN_NAME_PRICE);
+        if(value.isEmpty()){
+            return;
+        }
+        value = value.replace(',', '.');
+        int pos = value.indexOf('.');
+        if (pos >= 0) {
+            if(pos > 0) {
+                price = value.substring(0, pos);
+            } else {
+                price = "0";
+            }
+            if (pos + 2 < value.length()) {
+                price = price.concat(value.substring(pos+1, pos+3));
+            } else if (pos + 1 < value.length()) {
+                price = price.concat(value.substring(pos+1, pos+2) + "0");
+            } else {
+                price = price.concat("00");
+            }
+        } else {
+            price = value + "00";
+        }
+        beer_price = Integer.parseInt(price);
+        values.remove(Beers.COLUMN_NAME_PRICE);
+        values.put(Beers.COLUMN_NAME_PRICE, beer_price);
+    }
+
+    private void decimalAlcoholManagement(ContentValues values) {
+        int alcohol_content;
+        String alcohol;
+        String value = (String) values.get(Beers.COLUMN_NAME_ALCOHOL_CONTENT);
+        if(value.isEmpty()){
+            return;
+        }
+        value = value.replace(',', '.');
+        int pos = value.indexOf('.');
+        if(pos >= 0) {
+            if(pos > 0){
+                alcohol = value.substring(0, pos);
+            } else {
+                alcohol = "0";
+            }
+            if (pos + 1 < value.length()) {
+                alcohol = alcohol.concat(value.substring(pos+1, pos+2));
+            } else {
+                alcohol = alcohol.concat("0");
+            }
+
+        } else {
+            alcohol = value + "0";
+        }
+        alcohol_content = Integer.parseInt(alcohol);
+        values.remove(Beers.COLUMN_NAME_ALCOHOL_CONTENT);
+        values.put(Beers.COLUMN_NAME_ALCOHOL_CONTENT, alcohol_content);
     }
 }
 

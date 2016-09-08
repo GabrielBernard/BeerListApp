@@ -83,7 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:digits="0123456789.,"/>
         <EditText
             android:id="@+id/Price"
             android:layout_width="0dp"
@@ -108,11 +109,11 @@
         android:layout_height="wrap_content"
         android:inputType="textPostalAddress" />
 
-    <Button
+    <!--Button
         android:id="@+id/SaveBeerInfos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_beer_infos"
-        android:onClick="addBeerToDB"/>
+        android:onClick="addBeerToDB"/-->
 
 </LinearLayout>
